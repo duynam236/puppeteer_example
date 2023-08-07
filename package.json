@@ -1,0 +1,37 @@
+{
+  "name": "test_email",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "gulp": "node ./node_modules/gulp/bin/gulp.js",
+    "build": "npm run gulp build",
+    "start-convert": "npm run gulp dev",
+    "release": "npm run gulp release",
+    "assets": "npm run gulp assets",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "send_email": "node sendEmail.js",
+    "dev": "npm run send_email && npm run start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^20.8.0",
+    "readline": "^1.3.0",
+    "del": "^6.1.1",
+    "event-stream": "^4.0.1",
+    "fresh": "^0.5.2",
+    "gulp": "^4.0.2",
+    "gulp-connect": "^5.7.0",
+    "gulp-group-css-media-queries": "^1.2.2",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-replace": "^1.1.3",
+    "gulp-sass": "^5.1.0",
+    "gulp-stylelint": "^13.0.0",
+    "inquirer": "^8.2.4",
+    "juice": "^8.1.0",
+    "mime": "^3.0.0",
+    "sass": "^1.54.5",
+    "stylelint": "^13.13.1"
+  }
+}

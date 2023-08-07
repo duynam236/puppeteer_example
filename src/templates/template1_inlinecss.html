@@ -1,0 +1,845 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Simple Transactional Email</title>
+    <style>
+        /* -------------------------------------
+          GLOBAL RESETS
+      ------------------------------------- */
+
+        /*All the styling goes here*/
+
+        img {
+            border: none;
+            -ms-interpolation-mode: bicubic;
+            max-width: 100%;
+        }
+
+        body {
+            background-color: #f6f6f6;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        table {
+            border-collapse: separate;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+            width: 100%;
+        }
+
+        table td {
+            font-size: 15px;
+            vertical-align: top;
+        }
+
+        /* -------------------------------------
+          BODY & CONTAINER
+      ------------------------------------- */
+
+        .body {
+            background-color: #f6f6f6;
+            width: 100%;
+        }
+
+        /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+        .container {
+            display: block;
+            margin: 0 auto !important;
+            /* makes it centered */
+            max-width: 680px;
+            padding: 10px;
+        }
+
+        /* This should also be a block element, so that it will fill 100% of the .container */
+        .content {
+            box-sizing: border-box;
+            display: block;
+            margin: 0 auto;
+            max-width: 680px;
+            padding: 10px;
+        }
+
+        /* -------------------------------------
+          HEADER, FOOTER, MAIN
+      ------------------------------------- */
+        .main {
+            background: #ffffff;
+            border-radius: 3px;
+            width: 100%;
+        }
+
+        .wrapper {
+            box-sizing: border-box;
+            padding: 30px 40px;
+        }
+
+        .wrapper1 {
+            padding: 0 40px;
+        }
+
+        .wrapper2 {
+            padding: 0 40px 0 15px;
+        }
+
+        .content-block {
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+
+        .header {
+            display: flex;
+            padding: 50px 40px;
+            background-color: #0047CC;
+        }
+
+        .footer {
+            clear: both;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            text-align: center;
+            width: 100%;
+            background-color: #F6FBFF;
+        }
+
+        .footer td,
+        .footer p,
+        .footer span,
+        .footer a {
+            color: black;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .footer .wrapper {
+            padding: 5px 40px;
+        }
+
+        /* -------------------------------------
+          TYPOGRAPHY
+      ------------------------------------- */
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: #000000;
+            font-weight: 600;
+            line-height: 1.4;
+            margin: 0;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 35px;
+            font-weight: 300;
+            text-align: center;
+            text-transform: capitalize;
+        }
+
+        p {
+            font-size: 15px;
+            font-weight: normal;
+            margin: 0;
+            margin-bottom: 15px;
+        }
+
+        ul,
+        ol {
+            font-size: 15px;
+            font-weight: normal;
+            margin: 0;
+            margin-bottom: 15px;
+            margin-left: -25px;
+        }
+
+        p li,
+        ul li,
+        ol li {
+            list-style-position: inside;
+            margin-left: 5px;
+            margin-bottom: 10px;
+        }
+
+        .wrapper table tr > td > ul > li {
+            color: #0047CC;
+        }
+
+        a {
+            color: #0047CC;
+            text-decoration: underline;
+        }
+
+        /* -------------------------------------
+          BUTTONS
+      ------------------------------------- */
+        .btn {
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .btn>tbody>tr>td {
+            padding-bottom: 15px;
+        }
+
+        .btn table {
+            width: auto;
+        }
+
+        .btn table td {
+            background-color: #ffffff;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .btn a {
+            background-color: #ffffff;
+            border: solid 1px #3498db;
+            border-radius: 5px;
+            box-sizing: border-box;
+            color: #3498db;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+            padding: 12px 25px;
+            text-decoration: none;
+            text-transform: capitalize;
+        }
+
+        .btn-primary table td {
+            background-color: #ffffff;
+        }
+
+        .btn-primary a {
+            background-color: #ffffff;
+            border-color: #ffffff;
+            color: #0047CC;
+        }
+
+        /* -------------------------------------
+          OTHER STYLES THAT MIGHT BE USEFUL
+      ------------------------------------- */
+        .last {
+            margin-bottom: 0;
+        }
+
+        .first {
+            margin-top: 0;
+        }
+
+        .align-center {
+            text-align: center;
+        }
+
+        .align-right {
+            text-align: right;
+        }
+
+        .align-left {
+            text-align: left;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .mt0 {
+            margin-top: 0;
+        }
+
+        .mb0 {
+            margin-bottom: 0;
+        }
+
+        .preheader {
+            color: transparent;
+            display: none;
+            height: 0;
+            max-height: 0;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            mso-hide: all;
+            visibility: hidden;
+            width: 0;
+        }
+
+        .powered-by a {
+            text-decoration: none;
+        }
+
+        hr {
+            border: 0;
+            border-bottom: 1px solid #DEDEDE;
+            margin: 0;
+        }
+
+        table.main tr {
+            border-bottom: 1px solid #DEDEDE;
+        }
+
+        /* -------------------------------------
+          RESPONSIVE AND MOBILE FRIENDLY STYLES
+      ------------------------------------- */
+        @media only screen and (max-width: 620px) {
+            table.body h1 {
+                font-size: 28px !important;
+                margin-bottom: 10px !important;
+            }
+
+            table.body p,
+            table.body ul,
+            table.body ol,
+            table.body td,
+            table.body span,
+            table.body a {
+                font-size: 16px !important;
+            }
+
+            table.body .wrapper,
+            table.body .article {
+                padding: 20px 20px !important;
+            }
+
+            table.body .content {
+                padding: 10px 0 !important;
+            }
+
+            table.body .logo img {
+                max-height: 40px;
+            }
+
+            table.body .container {
+                padding: 0 !important;
+                width: 100% !important;
+            }
+
+            table.body .header {
+                display: block;
+                padding: 20px !important;
+            }
+
+            table.body .main {
+                border-left-width: 0 !important;
+                border-radius: 0 !important;
+                border-right-width: 0 !important;
+            }
+
+            table.body .btn table {
+                width: 100% !important;
+            }
+
+            table.body .btn a {
+                width: 100% !important;
+            }
+
+            table.body .img-responsive {
+                height: auto !important;
+                max-width: 100% !important;
+                width: auto !important;
+            }
+
+            .footer .wrapper {
+                padding: 5px 20px !important;
+            }
+
+            .wrapper1 {
+                padding: 0 20px !important;
+            }
+
+            .wrapper2 {
+                padding: 0 20px 0 2px !important;
+            }
+        }
+
+        /* -------------------------------------
+          PRESERVE THESE STYLES IN THE HEAD
+      ------------------------------------- */
+        @media all {
+            .ExternalClass {
+                width: 100%;
+            }
+
+            .ExternalClass,
+            .ExternalClass p,
+            .ExternalClass span,
+            .ExternalClass font,
+            .ExternalClass td,
+            .ExternalClass div {
+                line-height: 100%;
+            }
+
+            .apple-link a {
+                color: inherit !important;
+                font-family: inherit !important;
+                font-size: inherit !important;
+                font-weight: inherit !important;
+                line-height: inherit !important;
+                text-decoration: none !important;
+            }
+
+            #MessageViewBody a {
+                color: inherit;
+                text-decoration: none;
+                font-size: inherit;
+                font-family: inherit;
+                font-weight: inherit;
+                line-height: inherit;
+            }
+
+            .btn-primary table td:hover {
+                background-color: #ebebeb !important;
+            }
+
+            .btn-primary a:hover {
+                background-color: #ebebeb !important;
+                border-color: #ebebeb !important;
+            }
+        }
+    </style>
+</head>
+
+<body style="font-family: 'Inter', 'Arial', sans-serif; font-size: 15px;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body" style="text-align: justify;">
+        <tr>
+            <td>&nbsp;</td>
+            <td class="container">
+                <div class="content logo">
+                    <img src="https://vcdn.subiz-cdn.com/file/firsnmktuzzmrdalxpcm" subizimage="true" alt="subiz" style="height: 100%;" />
+                </div>
+                <div class="content">
+                    <table class="header">
+                        <tr>
+                            <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/GAnalytics.svg/1200px-GAnalytics.svg.png" subizimage="true" style="max-width: 140px;"
+                                    alt="logo" border="0" /></td>
+                        </tr>
+                        <tr>
+                            <td style="color: white;">
+                                <h1 style="color: white; font-weight: 600; text-align: left;">Google Analytics 4</h1>
+                                <p style="font-size: 20px;">Toàn bộ tài khoản Google Analytics buộc phải update phiên
+                                    bản Google Analytics 4
+                                    (GA4) để tiếp tục sử dụng, do bản Universal Analytics (UA) đã ngừng hoạt động vào
+                                    ngày 01/07/2023</p>
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0"
+                                    class="btn btn-primary">
+                                    <tbody>
+                                        <tr>
+                                            <td align="left">
+                                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td> <a href="https://subiz.com.vn/blog/google-analytics-4-la-gi.html"
+                                                                    target="_blank">Xem chi
+                                                                    tiết
+                                                                    <img style="margin-left: 10px; max-height: 15px; margin-bottom: -3px;"
+                                                                        src="https://vcdn.subiz-cdn.com/file/firsobescmgiardsnwyd"
+                                                                        subizimage="true" />
+                                                                </a> </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- START CENTERED WHITE CONTAINER -->
+                    <table role="presentation" class="main" style="padding-bottom: 0;">
+
+                        <!-- START MAIN CONTENT AREA -->
+                        <tr>
+                            <td class="wrapper" style="padding-bottom: 0;">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <p>Tuần này, Subiz sẽ gửi đến bạn tổng hợp các thông tin quan
+                                                            trọng xoay quanh chủ đề Google Analytics 4, bao gồm:</p>
+                                                    </td>
+                                                </tr>
+                                                
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2" style="padding-bottom: 30px;">
+                                <ul>
+                                    <li><a style="text-decoration: none;" href="https://subiz.com.vn/blog/universal-analytics.html"
+                                                target="_blank">Chuyển đổi từ UA sang GA4 có ảnh hưởng tới các chiến dịch Google Ads không?</a></li>
+                                    <li><a style="text-decoration: none;" href="https://subiz.com.vn/blog/google-analytics-4-la-gi.html"
+                                                target="_blank">GA4 giống và khác UA như thế nào?</a></li>
+                                    <li><a style="text-decoration: none;" href="https://subiz.com.vn/blog/google-analytics-4-va-nhung-tinh-nang-noi-bat.html"
+                                                target="_blank">Các tính năng mới nổi bật của GA4</a></li>
+                                    <li><a style="text-decoration: none;" href="https://subiz.com.vn/blog/google-analytics-4.html"
+                                                target="_blank">GA4 hoạt động như thế nào và cách cài đặt GA4</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><hr/></td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper">
+                                <h2>Google Analytics 4 là gì?</h2>
+                                <p>Google Analytics (GA) là công cụ miễn phí của Google giúp theo dõi và phân tích tình trạng website để bạn có thể đưa ra giải pháp phù hợp và hiệu quả cho chiến lược Marketing của mình. Google Analytics 4 (GA4) là phiên bản mới nhất và đang được sử dụng chính thức của công cụ GA.</p>
+                                <p>GA4 ra đời từ ngày 14/10/2020. Tuy nhiên, lượng người dùng phiên bản GA4 rất ít do tính năng phức tạp. Sau sự kiện Universal Analytics ngừng hoạt động từ ngày 01/07/2023 thì GA4 chính là công cụ duy nhất giúp nhà quảng cáo theo dõi truy cập trang web và thực hiện chuyển đổi.  Phiên bản Google Analytics 4 thiên nhiều về phân tích sự kiện. Đồng thời bổ sung nhiều tính năng báo cáo chi tiết trong hành trình truy cập, chuyển đổi người dùng.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><hr/></td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper" style="padding-bottom: 0;">
+                                <h2>Chuyển đổi từ UA sang GA4 có ảnh hưởng tới các chiến dịch Google Ads không?</h2>
+                                <p>Tài khoản Google Ads sẽ không bị ảnh hưởng nếu bạn không liên kết tài sản Universal Analytics với tài khoản Google Ads. Trong trường hợp tài khoản đã liên kết thì mọi tài sản của Universal Analytics sẽ không được chuyển sang Google Ads sau ngày 1 tháng 7 năm 2023. Điều này có thể ảnh hưởng nghiêm trọng tới chiến dịch Google Ads nếu:</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li>Bạn đang đặt giá thầu trên giao dịch thương mại điện tử hoặc mục tiêu Universal Analytics đã nhập.</li>
+                                    <li>Chiến dịch Google Ads đang sử dụng đối tượng Universal Analytics</li>
+                                    <li>Đang nhập các chỉ số trang web Universal Analytics</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper" style="padding-top: 0;">
+                                <p><strong>Cách xử lý? </strong>Để bảo toàn tài sản, bạn hãy di chuyển liên kết Google Ads của tài sản Universal Analytics sang tài sản Google Analytics 4 trước ngày 1/7/2023. Tiếp đó, nhập lượt chuyển đổi lên Google Analytics 4 (để đặt giá thầu) và/hoặc thêm các đối tượng trên Google Analytics 4 vào một chiến dịch hoặc nhóm quảng cáo (để tái tiếp thị).</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><hr/></td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper" style="padding-bottom: 0;">
+                                <h2>So sánh 2 phiên bản Google Analytics 4 và Universal Analytics</h2>
+                                <p>Điểm giống nhau đều là công cụ theo dõi truy cập Web của Google. Tuy nhiên Universal Analytics – phiên bản cũ và Google Analytics 4 – phiên bản mới. Do vậy về tính năng ở 2 giao diện này có nhiều điểm khác nhau. So với phiên bản cũ, Google Analytics 4 có mô hình dữ liệu hoàn toàn mới, nó hỗ trợ thiết bị cho cả trang Website và ứng dụng di động.</p>
+                                <p>Đặc biệt Google Analytics 4 cung cấp chi tiết các chỉ số cụ thể, đo lường từng bước thực hiện chuyển đổi của người truy cập online. Ngoài ra, có 3 sự thay đổi lớn nhất trong GA4 mà các nhà quảng cáo dễ nhận thấy nhất là:</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li>Cấu trúc tài khoản</li>
+                                    <li>Tracking các thông số sự kiện </li>
+                                    <li>Các báo cáo dữ liệu.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper1">
+                                <h3>Tracking các thông số sự kiện</h3>
+                                <p>Một trong những khác biệt lớn nhất của Google Analytics 4 so với phiên bản cũ là  tracking hành vi người dùng theo hướng sự kiện và phân loại theo từng lĩnh vực kinh doanh. Điều này được thể hiện rõ ở 4 loại <a href="https://support.google.com/analytics/answer/9322688?hl=en&ref_topic=13367566&sjid=1127550262384275015-AP#zippy=%2Crealtime-report%2Cdebugview-report" target="_blank"> thông số sự kiện.</a></p>
+                                <img src="https://images.squarespace-cdn.com/content/v1/572d25ecd210b899879359a5/1633569817760-YDR0PDI8APTJG2SBYANH/google-analytics-4-events?format=2500w" subizimage="true" alt="image1" />
+                                <h4>Các sự kiện được thu thập tự động trên GA4:</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li><a href="https://support.google.com/analytics/answer/9234069?hl=en&ref_topic=13367566&sjid=1127550262384275015-AP" target="_blank"><strong>Automatically collected events</strong></a> (các sự kiện được thu thập tự động): GA4 thu thập tự đồng trên mỗi sự kiện bao gồm ngôn ngữ, quốc gia, thành phố, giới tính, thiết bị,…. Để xem được thông số này, bạn truy cập GA4 > chọn All Events > chọn sự kiện mà bạn muốn theo dõi. Tại đây, nếu để ý bạn sẽ thấy hệ thống sẽ tự động chuyển vào báo cáo Engagement > Event.</li>
+                                    <li><a href="https://support.google.com/analytics/answer/9216061?hl=en&ref_topic=13367566&sjid=1127550262384275015-AP" target="_blank"><strong>Enhanced measurement events</strong></a> (sự kiện đo lường nâng cao): Sự kiện này nhà quảng cáo không cần phải điều chỉnh bất kỳ mã code nào mà chỉ cần bật các thông số của sự kiện khi thiết lập data streams. Đăng nhập GA4 > Admin tại menu bên trái > tại cột thuộc tính Property chọn Data Streams > chọn luồng dữ liệu mà bạn muốn bật enhanced measurement > nhấp vào biểu tượng cài đặt bên dưới phần Enhanced measurement > bật tất cả sự kiện và nhấn Save để lưu lại thao tác.</li>
+                                    <li><a href="https://support.google.com/analytics/answer/9267735?visit_id=638257639121826367-911072975&rd=2" target="_blank"><strong>Recommended events</strong></a> (sự kiện được đề xuất): Là những sự kiện nhà quảng có có thể tự thực hiện nhưng tên và thông số của sự kiện đã được google xác định từ trước đó. Các sự kiện được đề xuất được chia theo ngành như: All properties (sự kiện đề xuất cho tất cả các thuộc tính như login, purchase, search…)  Retail/Ecommerce (ứng dụng bán lẻ và thương mại điện tử), Jobs, Education, Local Deals, Real Estate (danh sách sự kiện đề xuất cho ngành giáo dục, tuyển dụng, bất động sản… thực hiện trên web hoặc ứng dụng),...</li>
+                                    <li><a href="https://support.google.com/analytics/answer/12229021?hl=en&ref_topic=13367566&sjid=1127550262384275015-AP" target="_blank"><strong>Custom events</strong></a> (sự kiện tùy chỉnh): Những sự kiện do nhà quảng cáo tự đặt tên và triển khai để đo lường những thông số mà 3 sự kiện có sẵn nói trên của GA4 không cung cấp được.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper1">
+                                <h3>Báo cáo dữ liệu của Google Analytics 4</h3>
+                                <p>Thay vì có 5 loại báo cáo như phiên bản Universal, phiên bản Google Analytics 4 có nhiều báo cáo chi tiết hơn:</p>
+                                <img src="https://storage.googleapis.com/support-kms-prod/0i5WSLS0EbhvvCOmi9p67zcSmarUKMbjSmPR" subizimage="true" alt="image2" />
+                                <h4>Các loại dữ liệu báo cáo trên Google Analytics 4:</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2" style="padding-top: 0; padding-bottom: 30px;">
+                                <ul>
+                                    <li><strong>Báo cáo Real Time: </strong>Thời gian thực người dùng truy cập Website haowjc ứng dụng của bạn.Giúp là quảng cáo so sánh hiệu suất của các chiến dịch quảng cáo và lưu lượng truy cập website từ các nguồn… ngay tại thời điểm thực.</li>
+                                    <li><strong>Báo cáo tại trang chủ: </strong>Chi tiết về người dùng trên trang như vị trí địa lý, thời gian tương tác trung bình… Thêm đó là thông số về chuyển đổi theo tên sự kiện được hiển thị tổng quát tại trang chủ dưới dạng số liệu và biểu đồ.</li>
+                                    <li><strong>Báo cáo Acquisition: </strong>Thông số chuyển đổi Acquisition trong Google Analytics 4 gồm ba hạng mục: Overview, User acquisition và Traffic acquisition. </li>
+                                    <li><strong>Báo cáo Engagement: </strong>Thể hiện mức độ tương tác người dùng trên trang. Nhờ đó nhà quảng cáo có thể phân tích được đâu là sự kiện xảy ra nhiều và tỷ lệ chênh lệch giữa các sự kiện. </li>
+                                    <li><strong>Báo cáo Monetization: </strong>Báo cáo này thể hiện chỉ số hoạt động về thương mại điện tử lên quan tới doanh thu, số lượng mua lần đầu, sản phẩm được mua,…</li>
+                                    <li><strong>Báo cáo Retention: </strong>Báo cáo về tỷ lệ giữ chân người dùng và tỷ lệ người dùng quay lại website theo những khoảng thời gian nhất định (1 ngày, 7 ngày, 30 ngày…)</li>
+                                    <li>Ngoài ra, còn nhiều báo cáo chi tiết khác như: Báo cáo Tech, Conversations, All events, Analysis, Audiences.</li>  
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><hr/></td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper" style="padding-bottom: 0;">
+                                <h2>Các tính năng nổi bật của Google Analytics 4</h2>
+                                <p>GA4 có mô hình dữ liệu hoàn toàn mới, nó hỗ trợ thiết bị cho cả trang Website và ứng dụng di động.</p>
+                                <h3>Điểm nổi bật của GA4 là:</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li>Thu thập cả dữ liệu ứng dụng và dữ liệu trang web để hiểu rõ hơn về hành trình của khách hàng</li>
+                                    <li>Sử dụng dữ liệu dựa trên sự kiện thay vì dựa trên phiên</li>
+                                    <li>Áp dụng chế độ kiểm soát quyền riêng tư (như giải pháp đo lường không dùng cookie) cũng như các quy trình lập mô hình hành vi và lập mô hình lượt chuyển đổi</li>
+                                    <li>Có khả năng dự đoán để đưa ra thông tin hướng dẫn mà không cần đến các mô hình phức tạp</li>
+                                    <li>Tích hợp trực tiếp với các nền tảng truyền thông để thúc đẩy hành động trên trang web hoặc ứng dụng</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper1">
+                                <h3>Một số tính năng quan trọng của Google Analytics 4 tới doanh nghiệp như:</h3>
+                                <h4>Dữ liệu dựa trên sự kiện (event-based data)</h4>
+                                <p>So sánh cho thể thấy, Google Analytics 4 có nền tảng hoàn toàn khác so với Universal Analytics về mô hình đo lường. UA sử dụng trên phiên truy cập (session) và số lần xem trang (pageview) dựa vào người dùng trên trang ở một khung giờ nhất định. GA4 đo lường dựa trên sự kiện (event) và các thông số, mỗi tương tác tương ứng với một sự kiện độc lập. Ví dụ như: xem trang, nhấn nút, tải xuống tệp…GA4 có thể theo dõi và ghi lại các sự kiện tự động hoặc tùy chỉnh.</p>
+                                <p>Nhờ đó, doanh nghiệp có thể hiểu rõ hơn về hành vi, dễ dàng đọc vị khách hàng. Những sự kiện quan trọng cho từng mục tiêu kinh doanh nhờ đó sẽ được đo lường hiệu quả. </p>
+                                <h4>Nhận dạng và báo cáo theo người dùng</h4>
+                                <p>Điểm nổi bật của GA4 bởi tính năng cho phép theo dõi và báo cáo theo người dùng (User). Để làm được điều đó GA4 sử dụng mã định danh duy nhất (user ID) để nhận diện khách hàng qua các thiết bị và kênh tương tác, điều kiện là họ đăng nhập vào tài khoản của doanh nghiệp.</p>
+                                <p>User ID của GA4 được sử dụng để phân biệt người dùng trên nhiều thiết bị và kết nối giữa các phiên. Hiểu một cách đơn giản, bạn là một khách hàng truy cập vào Website bằng điện thoại và laptop thì UA sẽ nhận định có 2 user. Tuy nhiên GA4 thông minh hơn sẽ phân biệt được đó chỉ có 1 user duy nhất và truy cập bằng nhiều thiết bị.</p>
+                                <p>Nhờ mã định danh, doanh nghiệp sát sao trong hành trình khách hàng quá các điểm tiếp xúc khác nhau từ đó giúp gia tăng tối ưu chiến lược chuyển đổi/chăm sóc/giữ chân khách hàng trung thành.</p>
+                                <h4>Tính năng dự báo thông minh</h4>
+                                <p>Tính năng thông minh và dự báo của Google Analytics 4 hoạt động trên nền tảng trí tuệ nhân tạo AI, có khả năng phân tích và mô hình hóa dữ liệu.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li><strong>Báo cáo chi tiết: </strong>Google Analytics 4 nổi bật với khả năng xem dữ liệu đến từ nhiều nguồn khác nhau trong thuộc tính. Những biến động lớn trong dữ liệu sẽ được GA4 báo cáo chi tiết. Ví dụ: Lưu lượng truy cập/tỷ lệ chuyển đổi giảm hay tăng đột biến.</li>
+                                    <li><strong>Báo cáo không gian trống (gap reports): </strong>GA4 sẽ báo cho doanh nghiệp về những khoảng trống trong việc thu thập dữ liệu. Ví dụ như khi người dùng chặn cookie hoặc không cho phép theo dõi.</li>
+                                    <li><strong>Dự báo xu hướng: </strong>Thông qua GA4, doanh nghiệp có thể xác định được dự báo xu hướng trong tương lai. Ví dụ như lượng người dùng, doanh thu,…</li>
+                                    <li><strong>Dự báo hành vi: </strong>GA4 đo lường dựa trên sự kiện (event), mỗi hành vi của người dùng là một sự kiện. Do vậy doanh nghiệp dễ dàng theo dõi được hoạt động người dùng trên trang. Ví dụ như các hàng động click trang, mua hàng hay chia sẻ sản phẩm. Đây là ưu điểm nổi bật của GA4 giúp doanh nghiệp có thể theo sát chiến dịch Marketing để có những điều chỉnh kịp thời, dự đoán được xu thế, nhu cầu khách hàng,…</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper1">
+                                <h4>Tính năng kiểm soát quyền riêng tư</h4>
+                                <p>Một trong những lý do doanh nghiệp nên sử dụng GA4, bởi Google Analytics 4 hoạt động trên các nền tảng khác nhau, không dựa vào dữ liệu từ cookie và đã tăng cường kiểm soát quyền riêng tư.</p>
+                                <p>Analytics 4  không chỉ kiểm soát thu thập dữ liệu kỹ lưỡng mà còn rất chi tiết và sẽ ngừng lưu trữ địa chỉ IP. Các tính năng bổ sung này rất quan trọng trong bối cảnh hiện tại, nơi người dùng yêu cầu nhiều biện pháp bảo vệ và kiểm soát quyền riêng tư hơn đối với dữ liệu của họ.</p>
+                                <p>Điều này sẽ mang lại những ảnh hưởng tích cực tới doanh nghiệp của bạn như:</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li>Giúp doanh nghiệp tuân thủ các quy định về bảo mật và quyền riêng tư dữ liệu, như GDPR hay CCPA.</li>
+                                    <li>Tăng sự tin tưởng và uy tín của khách hàng khi biết rằng dữ liệu của họ được bảo vệ và kiểm soát.</li>
+                                    <li>Cho phép doanh nghiệp tùy biến mức độ truy cập và hạn chế về dữ liệu cho các nhóm người dùng khác nhau, dựa trên vai trò, thuộc tính hoặc điều kiện môi trường</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper1">
+                                <p>Tính năng kiểm soát quyền riêng tư của GA4 là bước tiến quan trọng trong việc bảo vệ dữ liệu người dùng. Nhưng cũng mang đến nhiều thách thức và cơ hội cho doanh nghiệp. Thương hiệu cần cân nhắc kỹ lưỡng các ảnh hưởng của tính năng này để có thể tận dụng tối đa lợi ích của GA4.</p>
+                                <h4>GA4 với tính năng tích hợp và hỗ trợ quảng cáo</h4>
+                                <p>Google Analytics 4 tích hợp và hỗ trợ quảng cáo hiệu quả giúp kết nối dữ liệu trên nhiều nền tảng quảng cáo khác nhau:</p>
+                                <h4>Tích hợp với Google Marketing Platform</h4>
+                                <p>GA4 có thể được liên kết với Google Marketing Platform giúp tạo báo cáo đa kênh và đo lường hiệu quả của chiến dịch quảng cáo trên các kênh khác nhau. Những báo cáo này sẽ là yếu tố quan trọng giúp bạn đánh giá và tối ưu chiến lược hiệu quả theo mục tiêu kinh doanh.</p>
+                                <h4>Tích hợp với Google Ads</h4>
+                                <p>GA4 kết nối dữ liệu với Google Ads để tạo ra danh sách khách hàng mục tiêu và nhiều chiến dịch quảng cáo trên các nền tảng khác nhau.</p>
+                                <p>Đặc biệt, khi liên kết Google Analytics 4 với tài khoản Google Ads, cho phép bạn:</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li>Xem chi tiết chiến dịch trên Google Ads trong báo cáo <a href="https://support.google.com/analytics/answer/12930957" target="_blank">Chiến dịch trên Google Ads</a></li>
+                                    <li>Sử dụng các phương diện mới của Google Ads trong báo cáo <a href="https://support.google.com/analytics/answer/12922540" target="_blank">thu nạp người dùng</a></li>
+                                    <li>Xem chi tiết chiến dịch trên Google Ads trong báo cáo  <a href="https://support.google.com/analytics/answer/10607798#zippy=%2Cin-this-article" target="_blank">Quảng cáo</a>, bao gồm cả báo cáo <a href="https://support.google.com/analytics/topic/10597959" target="_blank">Phân bổ</a></li>
+                                    <li>Nhập lượt chuyển đổi Analytics vào tài khoản Google Ads</li>
+                                    <li>Tăng cường hoạt động tái tiếp thị trên Google Ads bằng cách sử dụng <a href="https://support.google.com/analytics/answer/9313634" target="_blank">dữ liệu về đối tượng của Analytics</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper" style="padding-top: 0;">
+                                <h4>Hỗ trợ quảng cáo không sử dụng cookie</h4>
+                                <p>Ưu điểm khác của GA4 là có thể tiếp cận khách hàng mà không cần sử dụng tới cookie hoặc nhận diện thiết bị. Vậy GA4 dùng gì? Consent Mode – là công cụ để GA4 điều chỉnh thu thập và sử dụng dữ liệu dựa trên sự đồng ý của người dùng. Điều này giúp doanh nghiệp đảm bảo về quyền riêng tư mà không gây ảnh hưởng tới hiệu quả quảng cáo.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><hr/></td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper" style="padding-bottom: 0;">
+                                <h2>Google Analytics 4 hoạt động như thế nào?</h2>
+                                <p>Google Analytics 4 theo dõi traffic thời gian thực, từ đó giúp nhà quảng cáo phân tích sự tăng giảm lượt truy cập cho cả website và từng trang để ra quyết định, khám phá insight của độc giả,…</p>
+                                <p>Cách thức hoạt động của GA4 được chia thành 3 giai đoạn:</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li>Đo lường (measuring)</li>
+                                    <li>Báo cáo (reporting)</li>
+                                    <li>Phân tích (analyzing)</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper1">
+                                <h3>Đo lường</h3>
+                                <p>Ví dụ: Sau khi tạo tài khoản, bạn sẽ có 2 lựa chọn để triển khai một đoạn mã cho website: <strong>Google site tag (gtag.js)</strong> hoặc <strong>Google Tag Manager</strong>. Mã JavaScript có chức năng kết nối trang web với Google Analytics. Sau khi cài đặt, dữ liệu sẽ chuyển vào tài khoản GA 4 của bạn. Không chỉ vậy, Google Analytics 4 có khả năng kiểm tra những gì đang xảy ra trên website trong thời gian thực tế.</p>
+                                <h3>Báo cáo</h3>
+                                <p>Google Analytics 4 cung cấp nhiều báo cáo được tạo sẵn mà bạn có thể sử dụng để quan sát dữ liệu từ trang web và ứng dụng của mình.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li><strong>Báo cáo thu nạp (acquisition report): </strong>Cho phép bạn kiểm tra cách người dùng truy cập trang web của bạn.</li>
+                                    <li><strong>Báo cáo tương tác: </strong>Dữ liệu về cách người dùng tương tác với trang web của bạn có thể được nhìn thấy trong báo cáo tương tác (engagement report).</li>
+                                    <li><strong>Báo cáo nhân khẩu học: </strong>Có thể xem thông tin về người dùng của mình như vị trí, độ tuổi và sở thích của khách hàng</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper" style="padding-top: 0;">
+                                <h3>Phân tích</h3>
+                                <p>Với GA4, hành trình của người dùng được chia nhỏ thành nhiều bước. Ví dụ: Người dùng xem 1 sản phẩm > xem thêm sản phẩm > cung cấp thông tin > mua hàng. Tức hành hình của khách hàng từ insight/hành vi đó thành các hành động. Bạn có thể bắt đầu với một số thử nghiệm A/B hoặc thay đổi hoàn toàn cách bạn trình bày nội dung trang web/ứng dụng của mình.</p>
+                                <p>Dù thay đổi thế nào, GA4 vẫn có thể cho bạn biết liệu chúng có tác động tích cực, tiêu cực hoặc không quan trọng đối với doanh nghiệp của bạn hay không. Đây sẽ là công cụ quan trọng để bạn có thể tối ưu hóa nội dung và cuối cùng là tăng trưởng doanh thu bền vững.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><hr/></td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper" style="padding-bottom: 0;">
+                                <h2>Cách cài đặt Google Analytics 4 đơn giản</h2>
+                                <h3>Cách 1: Thiết lập tính năng <a href="https://support.google.com/analytics/answer/9304153" target="_blank">thu thập dữ liệu trong Analytics lần đầu tiên</a></h3>
+                                <p>Trước tiên cần tạo thuộc tính và luồng dữ liệu</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li>Đầu tiên, đăng nhập vào <a href="https://analytics.google.com/analytics/web/#/provision" target="_blank">analytics.google.com</a></li>
+                                    <li>Điền thông tin để tạo Thuộc tính và Luồng dữ liệu</li>
+                                    <li>Sau đó, sử dụng mã HTML hoặc ID đo lường để cài đặt GA4</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper1">
+                                <img src="https://vcdn.subiz-cdn.com/file/firsobiwsilumsalpoyb" subizimage="true" alt="image3"/>
+<h4>Cách cài đặt Google Analytics 4 bằng Thẻ trang web của Google (gtag.js)</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li><strong>Sao chép Global Site Tag và cài đặt nó trong thẻ &lt;/head&gt;:</strong>Sao chép mã từ Global Site Tag và dán vào <head> của HTML. Chọn theo thứ tự: Data Stream > Select the desired Stream > Tagging Instructions > Add a new on-page tag.</li>
+                                    <li><strong>Sao chép ID đo lường và cài đặt nó qua CMS: </strong>Nếu trang web của bạn sử dụng Trình tạo trang web hoặc CMS như WordPress, Wix, Hubspot hoặc Weebly, hãy sao chép ID đo lường và cài đặt nó trong hệ thống back-end của bạn theo các bước mà CMS của bạn nêu ra <a href="https://support.google.com/analytics/answer/10840722?hl=en&utm_id=ad#cms&zippy=%2Cwordpresscom-supports-a-g--measurement-id" target="_blank">(Chi tiết)</a>.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper1">
+                                <h4>Cách cài đặt Google Analytics 4 qua Google Tag Manager</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper2">
+                                <ul>
+                                    <li>Mã theo dõi, chẳng hạn như Google Analytics hoặc Facebook Pixel</li>
+                                    <li>Trình kích hoạt hoặc điều kiện xác định hành động của Thẻ</li>
+                                    <li>Các biến là chỉ thị để trình kích hoạt hoạt động hiệu quả hơn</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="wrapper" style="padding-top: 0;">
+                                <h3>Cách 2: Thêm Google Analytics 4 vào một trang web sử dụng Universal Analytics</h3>
+<p>Thêm Google Analytics 4 vào một trang web sử dụng Universal Analytics chỉ sử dụng với <a href="https://support.google.com/analytics/answer/9744165#zippy=%2Cin-this-article" target="_blank">Analytics phiên bản “cũ”</a>.</p>
+<p>Bạn sẽ thêm Google Analytics 4 cùng với tài sản Universal Analytics mà bạn đang có. Như vậy, tài sản Universal Analytics của bạn sẽ vẫn tiếp tục thu thập dữ liệu. Bạn có thể truy cập vào cả hai tài sản này bằng cách sử dụng <a href="https://support.google.com/analytics/answer/10252712" target="_blank">bộ chọn tài sản</a> trong phần Quản trị.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><hr/></td>
+                        </tr>
+
+                        <!-- END MAIN CONTENT AREA -->
+                    </table>
+                    <!-- END CENTERED WHITE CONTAINER -->
+
+                    <!-- START FOOTER -->
+                    <div class="footer">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="wrapper content-block">
+                                    <img src="https://vcdn.subiz-cdn.com/file/firsnmktuzzmrdalxpcm" subizimage="true" alt="subiz" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="wrapper">
+                                    <table style="max-width: 130px; margin: auto;">
+                                        <tr>
+                                            <td>
+                                                <img src="https://vcdn.subiz-cdn.com/file/firsnmkvnfeofqtgwwlg" subizimage="true" alt="logo-subiz" style="margin-top: 3px;"/>
+                                            </td>
+                                            <td>
+                                                <img src="https://vcdn.subiz-cdn.com/file/firsnmkxvjxfkmdbfqfl" subizimage="true" alt="logo-facebook"/>
+                                            </td>
+                                            <td>
+                                                <img src="https://vcdn.subiz-cdn.com/file/firsnmkzsgcbvaearbum" subizimage="true" alt="logo-zalo"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="wrapper">
+                                    <table>
+                                        <tr>
+                                            <td><strong>Email:</strong> Support@subiz.com</td>
+                                            <td><strong>SĐT:</strong> +84 2473.021.368</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="wrapper">
+                                    <span>T6 tòa nhà Kailash, Lô B21 ô D21, Ngõ 92, Trần Thái Tông, Dịch Vọng Hậu, Cầu Giấy, HN</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="wrapper">
+                                    <span style="margin-right: 10px;">Bạn không muốn nhận các tin tức về kinh doanh và marketing?</span>
+                                    <a href="#" style="color: #0047CC">Ngừng nhận Email</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="wrapper">
+                                    <hr/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #999999;">© Copyright Subiz 2023 - Công cụ tương tác khách hàng đa kênh</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- END FOOTER -->
+
+                </div>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</body>
+
+</html>
